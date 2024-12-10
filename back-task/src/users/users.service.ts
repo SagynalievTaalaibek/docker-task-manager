@@ -17,6 +17,7 @@ export class UsersService {
       const user = new this.userModel({
         email: createUserDto.email,
         password: createUserDto.password,
+        username: createUserDto.username,
       });
 
       user.generateToken();

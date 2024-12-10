@@ -20,5 +20,6 @@ import { MongooseModule } from '@nestjs/mongoose';
     LocalStrategy,
     TokenAuthGuard,
   ],
+  exports: [MongooseModule],
 })
 export class UsersModule {}
