@@ -51,8 +51,6 @@ const EditTask = () => {
         dueDate: formatDate(oneTask.dueDate),
         status: oneTask.status,
       });
-
-      console.log(oneTask);
     }
   }, [oneTask]);
 

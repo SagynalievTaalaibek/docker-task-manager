@@ -22,20 +22,26 @@ export class TasksService {
   }
 
   async findOne(id: string): Promise<Task> {
-    const task = await this.taskModel.findById(id).exec();
+    const task = await this.taskModel.findById({ _id: id }).exec();
     if (!task) {
       throw new NotFoundException(`Task with ID ${id} not found`);
     }
     return task;
   }
 
-  async update(id: string, updateTaskDto: UpdateTaskDto, userId: string): Promise<Task> {
+  async update(
+    id: string,
+    updateTaskDto: UpdateTaskDto,
+    userId: string,
+  ): Promise<Task> {
     const updatedTask = await this.taskModel
       .findOneAndUpdate({ _id: id, userId }, updateTaskDto, { new: true })
       .exec();
 
     if (!updatedTask) {
-      throw new NotFoundException(`Task with ID ${id} not found for user ${userId}`);
+      throw new NotFoundException(
+        `Task with ID ${id} not found for user ${userId}`,
+      );
     }
     return updatedTask;
   }
@@ -45,10 +51,11 @@ export class TasksService {
       .findOneAndDelete({ _id: id, userId })
       .exec();
     if (!result) {
-      throw new NotFoundException(`Task with ID ${id} not found for user ${userId}`);
+      throw new NotFoundException(
+        `Task with ID ${id} not found for user ${userId}`,
+      );
     } else {
-      return "Task was removed successfully!";
+      return 'Task was removed successfully!';
     }
   }
-
 }

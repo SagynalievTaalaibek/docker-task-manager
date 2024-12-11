@@ -29,7 +29,6 @@ const OneTask: React.FC<Props> = ({ _id, title, dueDate, status }) => {
     }
   `;
 
-  console.log(_id);
   return (
     <>
       <Card sx={{ display: 'flex', mb: 3, p: 1, border: '1px solid black' }}>

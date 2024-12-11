@@ -29,7 +29,7 @@ const Tasks = () => {
   const [task, setTask] = useState<TaskMutation>({
     title: '',
     dueDate: '',
-    status: '',
+    status: 'pending',
   });
 
   const tasks = useAppSelector(selectTasks);
@@ -103,7 +103,7 @@ const Tasks = () => {
               _id={item._id}
             />
           ))}
-        <Typography variant={'h4'} sx={{ fontWeight: 'bold' }}>
+        <Typography variant={'h4'} sx={{ fontWeight: 'bold', mt: 4 }}>
           To Doo
         </Typography>
         <Divider />
@@ -118,7 +118,7 @@ const Tasks = () => {
               _id={item._id}
             />
           ))}
-        <Typography variant={'h4'} sx={{ fontWeight: 'bold' }}>
+        <Typography variant={'h4'} sx={{ fontWeight: 'bold', mt: 4 }}>
           Done
         </Typography>
         {tasks
@@ -161,7 +161,6 @@ const Tasks = () => {
                     <InputLabel id="status">Status</InputLabel>
                     <Select
                       id="status"
-                      required
                       labelId="status"
                       value={task.status}
                       name="status"
