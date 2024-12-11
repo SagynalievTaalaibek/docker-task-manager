@@ -115,6 +115,7 @@ const EditTask = () => {
                   name="status"
                   label="Status"
                   onChange={selectChangeHandler}
+                  variant="outlined"
                 >
                   <MenuItem value="">
                     <em>None</em>
