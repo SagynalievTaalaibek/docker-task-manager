@@ -18,12 +18,6 @@ export class CreateTaskDto {
   status?: string;
 
   @IsOptional()
-  @IsEnum(['low', 'medium', 'high'], {
-    message: 'Priority must be either "low", "medium", or "high"',
-  })
-  priority?: string;
-
-  @IsOptional()
   @IsDate()
   dueDate?: Date;
 }
