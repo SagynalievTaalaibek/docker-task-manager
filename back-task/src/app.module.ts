@@ -7,7 +7,7 @@ import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/task'),
+    MongooseModule.forRoot('mongodb://mongo:27017/task'),
     UsersModule,
     TasksModule,
   ],
