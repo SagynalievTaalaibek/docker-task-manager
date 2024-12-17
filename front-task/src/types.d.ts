@@ -37,7 +37,7 @@ export interface GlobalError {
   error: string;
 }
 
-// Tasks
+// TodayTask
 
 export interface TaskMutation {
   title: string;

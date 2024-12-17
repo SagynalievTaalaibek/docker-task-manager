@@ -31,7 +31,7 @@ const Filter: React.FC<Props> = ({onSearch, isLoading}) => {
                     value={searchTerm}
                     onChange={(event) => setSearchTerm(event.target.value)}
                     autoComplete="off"
-                    placeholder="Tasks"
+                    placeholder="TodayTask"
                     label="Find Task"
                 />
                 <LoadingButton

@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import React from 'react';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import dayjs from 'dayjs';
-import { STATUS } from '../../constants.ts';
+import { STATUS } from '../../../constants.ts';
 
 dayjs.extend(LocalizedFormat);
 
