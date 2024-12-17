@@ -7,7 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req,
+  Req, Query,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -27,8 +27,8 @@ export class TasksController {
 
   @UseGuards(TokenAuthGuard)
   @Get()
-  findAll(@Req() request: AuthenticatedRequest) {
-    return this.tasksService.findAll(request.user._id);
+  findAll(@Req() request: AuthenticatedRequest, @Query() query: {taskSearch: boolean, search: string}) {
+    return this.tasksService.findAll(request.user._id, query.taskSearch, query.search);
   }
 
   @UseGuards(TokenAuthGuard)

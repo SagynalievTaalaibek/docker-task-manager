@@ -11,6 +11,14 @@ export const fetchTasks = createAsyncThunk<TaskGet[]>(
   },
 );
 
+export const fetchSearchTasks = createAsyncThunk<TaskGet[], string>(
+    'tasks/fetchSearchTasks',
+    async (search) => {
+        const response = await axiosApi.get<TaskGet[]>(`/tasks?taskSearch=true&search=${search}`);
+        return response.data;
+    },
+);
+
 export const fetchOneTask = createAsyncThunk<TaskGet, string>(
   'tasks/fetchOneTask',
   async (taskId) => {

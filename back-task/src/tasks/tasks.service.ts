@@ -17,7 +17,14 @@ export class TasksService {
     return task.save();
   }
 
-  async findAll(userId: string): Promise<Task[]> {
+  async findAll(userId: string, taskSearch: boolean, search: string): Promise<Task[]> {
+    if (taskSearch) {
+      return this.taskModel.find({
+        title: { $regex: search, $options: 'i' },
+      })
+    }
+
+
     return this.taskModel.find({ userId }).exec();
   }
 
