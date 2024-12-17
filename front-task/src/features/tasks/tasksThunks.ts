@@ -19,6 +19,22 @@ export const fetchSearchTasks = createAsyncThunk<TaskGet[], string>(
     },
 );
 
+export const fetchByDashboardTasks = createAsyncThunk<TaskGet[], string>(
+  'tasks/fetchByDashboardTasks',
+  async (search) => {
+    const response = await axiosApi.get<TaskGet[]>(`/tasks?dashboard=true&dashboardSearch=${search}`);
+    return response.data;
+  },
+);
+
+export const fetchByCategoryTasks = createAsyncThunk<TaskGet[], string>(
+  'tasks/fetchByCategoryTasks',
+  async (search) => {
+    const response = await axiosApi.get<TaskGet[]>(`/tasks?category=true&categorySearch=${search}`);
+    return response.data;
+  },
+);
+
 export const fetchOneTask = createAsyncThunk<TaskGet, string>(
   'tasks/fetchOneTask',
   async (taskId) => {

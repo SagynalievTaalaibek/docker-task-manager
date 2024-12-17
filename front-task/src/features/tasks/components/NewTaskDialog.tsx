@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Dialog,
@@ -14,9 +14,11 @@ import {
   TextField,
 } from '@mui/material';
 import { openTask, selectIsOpen } from '../tasksSlice.ts';
-import { STATUS } from '../../../constants.ts';
+import { PRIORITIES, STATUS } from '../../../constants.ts';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks.ts';
 import { TaskMutation } from '../../../types';
+import { selectCategory } from '../../category/categorySlice.ts';
+import { fetchCategory } from '../../category/categoryThunks.ts';
 
 interface Props {
   onSubmit: (task: TaskMutation) => void;
@@ -25,11 +27,18 @@ interface Props {
 const NewTaskDialog: React.FC<Props> = ({ onSubmit }) => {
   const isOpen = useAppSelector(selectIsOpen);
   const dispatch = useAppDispatch();
+  const categories = useAppSelector(selectCategory);
+
+  useEffect(() => {
+    dispatch(fetchCategory());
+  }, [dispatch]);
 
   const [task, setTask] = useState<TaskMutation>({
     title: '',
     dueDate: '',
     status: 'pending',
+    priority: 'medium',
+    categoryId: '',
   });
 
   const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,6 +66,8 @@ const NewTaskDialog: React.FC<Props> = ({ onSubmit }) => {
       title: '',
       dueDate: '',
       status: '',
+      priority: '',
+      categoryId: '',
     });
 
     dispatch(openTask(false));
@@ -75,6 +86,7 @@ const NewTaskDialog: React.FC<Props> = ({ onSubmit }) => {
                 name="title"
                 value={task.title}
                 onChange={inputChangeHandler}
+                fullWidth
               />
             </Grid2>
             <Grid2 size={12}>
@@ -85,6 +97,7 @@ const NewTaskDialog: React.FC<Props> = ({ onSubmit }) => {
                 name="dueDate"
                 value={task.dueDate}
                 onChange={inputChangeHandler}
+                fullWidth
               />
             </Grid2>
             <Grid2 size={12}>
@@ -104,6 +117,52 @@ const NewTaskDialog: React.FC<Props> = ({ onSubmit }) => {
                   </MenuItem>
                   {STATUS.map((item) => (
                     <MenuItem key={item.id} value={item.value}>
+                      {item.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={12}>
+              <FormControl fullWidth>
+                <InputLabel id="priority">Priority</InputLabel>
+                <Select
+                  id="priority"
+                  labelId="priority"
+                  value={task.priority}
+                  name="priority"
+                  label="Priority"
+                  onChange={selectChangeHandler}
+                  variant="outlined"
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {PRIORITIES.map((item) => (
+                    <MenuItem key={item.id} value={item.name}>
+                      {item.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={12}>
+              <FormControl fullWidth>
+                <InputLabel id="category">Category</InputLabel>
+                <Select
+                  id="category"
+                  labelId="category"
+                  value={task.categoryId}
+                  name="categoryId"
+                  label="Category"
+                  onChange={selectChangeHandler}
+                  variant="outlined"
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {categories.map((item) => (
+                    <MenuItem key={item._id} value={item._id}>
                       {item.name}
                     </MenuItem>
                   ))}

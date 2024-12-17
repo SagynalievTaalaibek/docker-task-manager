@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link as NavLink } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link as NavLink, useNavigate } from 'react-router-dom';
 import { CSSObject, styled, Theme, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -16,17 +16,27 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
-import HomeIcon from '@mui/icons-material/Home';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { Button, Container, Grid2, Tooltip } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../app/hooks.ts';
 import { logout } from '../../features/users/userThunks.ts';
 import { selectUser } from '../../features/users/userSlice.ts';
-import { dashboardSuperAdminRoutes, mainRoutes } from '../../constants.ts';
+import { mainRoutes } from '../../constants.ts';
+import AdjustIcon from '@mui/icons-material/Adjust';
 import { openTask } from '../../features/tasks/tasksSlice.ts';
 import NewTaskDialog from '../../features/tasks/components/NewTaskDialog.tsx';
-import { TaskMutation } from '../../types';
+import { CategoryMutation, TaskMutation } from '../../types';
 import { createTask, fetchTasks } from '../../features/tasks/tasksThunks.ts';
 import DateCalendarValue from '../DateCalendarValue.tsx';
+import {
+  openCategory,
+  selectCategory,
+} from '../../features/category/categorySlice.ts';
+import CategoryDialog from '../../features/category/CategoryDialog.tsx';
+import {
+  createCategory,
+  fetchCategory,
+} from '../../features/category/categoryThunks.ts';
 
 const drawerWidth = 260;
 
@@ -102,6 +112,13 @@ const Dashboard: React.FC<React.PropsWithChildren> = ({ children }) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
+
+  const categories = useAppSelector(selectCategory);
+
+  useEffect(() => {
+    dispatch(fetchCategory());
+  }, [dispatch]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -113,6 +130,7 @@ const Dashboard: React.FC<React.PropsWithChildren> = ({ children }) => {
 
   const handleLogout = async () => {
     await dispatch(logout());
+    navigate('/');
   };
 
   const user = useAppSelector(selectUser);
@@ -122,6 +140,13 @@ const Dashboard: React.FC<React.PropsWithChildren> = ({ children }) => {
 
     dispatch(openTask(false));
     await dispatch(fetchTasks());
+  };
+
+  const onCategorySubmit = async (category: CategoryMutation) => {
+    await dispatch(createCategory(category));
+
+    dispatch(openTask(false));
+    await dispatch(fetchCategory());
   };
 
   return (
@@ -230,9 +255,9 @@ const Dashboard: React.FC<React.PropsWithChildren> = ({ children }) => {
               ))}
             </List>
             <Divider />
-            {dashboardSuperAdminRoutes.map((item) => (
-              <ListItem key={item.id} disablePadding sx={{ display: 'block' }}>
-                <Tooltip title={item.tooltip} placement={'right'}>
+            {categories.map((item) => (
+              <ListItem key={item._id} disablePadding sx={{ display: 'block' }}>
+                <Tooltip title={item.name} placement={'right'}>
                   <ListItemButton
                     sx={{
                       minHeight: 48,
@@ -240,8 +265,7 @@ const Dashboard: React.FC<React.PropsWithChildren> = ({ children }) => {
                       px: 2.5,
                     }}
                     component={NavLink}
-                    to={item.tooltip === 'Prismic' ? item.url : `/${item.url}`}
-                    target={item.tooltip === 'Prismic' ? '_blank' : ''}
+                    to={'category/' + item.name.toLowerCase()}
                   >
                     <ListItemIcon
                       sx={{
@@ -250,10 +274,10 @@ const Dashboard: React.FC<React.PropsWithChildren> = ({ children }) => {
                         justifyContent: 'center',
                       }}
                     >
-                      {React.createElement(item.icon)}
+                      <AdjustIcon />
                     </ListItemIcon>
                     <ListItemText
-                      primary={item.title}
+                      primary={item.name.toLowerCase()}
                       sx={{ opacity: open ? 1 : 0 }}
                     />
                   </ListItemButton>
@@ -262,15 +286,14 @@ const Dashboard: React.FC<React.PropsWithChildren> = ({ children }) => {
             ))}
             <List>
               <ListItem disablePadding sx={{ display: 'block' }}>
-                <Tooltip title="На гланую страницу" placement={'right'}>
+                <Tooltip title="Add new category" placement={'right'}>
                   <ListItemButton
                     sx={{
                       minHeight: 48,
                       justifyContent: open ? 'initial' : 'center',
                       px: 2.5,
                     }}
-                    component={NavLink}
-                    to={`/`}
+                    onClick={() => dispatch(openCategory(true))}
                   >
                     <ListItemIcon
                       sx={{
@@ -279,10 +302,10 @@ const Dashboard: React.FC<React.PropsWithChildren> = ({ children }) => {
                         justifyContent: 'center',
                       }}
                     >
-                      <HomeIcon />
+                      <AddCircleOutlineIcon />
                     </ListItemIcon>
                     <ListItemText
-                      primary={'На главную страницу'}
+                      primary={'Add new category'}
                       sx={{ opacity: open ? 1 : 0 }}
                     />
                   </ListItemButton>
@@ -324,10 +347,12 @@ const Dashboard: React.FC<React.PropsWithChildren> = ({ children }) => {
         <DrawerHeader />
 
         <Container maxWidth={'xl'}>
-          <Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-            <Grid2 size={8}>
-              {children}
-            </Grid2>
+          <Grid2
+            container
+            rowSpacing={1}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          >
+            <Grid2 size={8}>{children}</Grid2>
             <Grid2 size={4}>
               <DateCalendarValue />
             </Grid2>
@@ -335,6 +360,7 @@ const Dashboard: React.FC<React.PropsWithChildren> = ({ children }) => {
         </Container>
       </Box>
       <NewTaskDialog onSubmit={onTaskSubmit} />
+      <CategoryDialog onSubmit={onCategorySubmit} />
     </Box>
   );
 };

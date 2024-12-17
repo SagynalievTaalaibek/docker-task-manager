@@ -12,6 +12,7 @@ import BaseLayout from './components/Dashboard/BaseLayout.tsx';
 import InboxTask from './features/tasks/InboxTask.tsx';
 import NextTask from './features/tasks/NextTask.tsx';
 import Completed from './features/tasks/Completed.tsx';
+import TaskCategory from './features/tasks/TaskCategory.tsx';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -19,57 +20,71 @@ const App = () => {
   return (
     <>
       <CssBaseline />
-      <BaseLayout>
+      {user ? (
+        <BaseLayout>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute isAllowed={!!user}>
+                  <TodayTask />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/inbox"
+              element={
+                <ProtectedRoute isAllowed={!!user}>
+                  <InboxTask />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/next-seven"
+              element={
+                <ProtectedRoute isAllowed={!!user}>
+                  <NextTask />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/completed"
+              element={
+                <ProtectedRoute isAllowed={!!user}>
+                  <Completed />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/date/:date"
+              element={<ProtectedRoute isAllowed={!!user}>Date</ProtectedRoute>}
+            />
+            <Route
+              path="/category/:category"
+              element={
+                <ProtectedRoute isAllowed={!!user}>
+                  <TaskCategory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/task/edit/:id"
+              element={
+                <ProtectedRoute isAllowed={!!user}>
+                  <EditTask />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BaseLayout>
+      ) : (
         <Routes>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute isAllowed={!!user}>
-                <TodayTask />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/inbox"
-            element={
-              <ProtectedRoute isAllowed={!!user}>
-                <InboxTask />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/next-seven"
-            element={
-              <ProtectedRoute isAllowed={!!user}>
-                <NextTask />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/completed"
-            element={
-              <ProtectedRoute isAllowed={!!user}>
-                <Completed />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/date/:date"
-            element={<ProtectedRoute isAllowed={!!user}>Date</ProtectedRoute>}
-          />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route
-            path="/task/edit/:id"
-            element={
-              <ProtectedRoute isAllowed={!!user}>
-                <EditTask />
-              </ProtectedRoute>
-            }
-          />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BaseLayout>
+      )}
     </>
   );
 };

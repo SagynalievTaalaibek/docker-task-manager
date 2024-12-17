@@ -1,18 +1,23 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks.ts';
-import { fetchByDashboardTasks } from './tasksThunks.ts';
+import { fetchByCategoryTasks } from './tasksThunks.ts';
 import { selectTasks } from './tasksSlice.ts';
 import TaskShow from '../../components/taskShow/taskShow.tsx';
+import { useParams } from 'react-router-dom';
 
-const NextTask = () => {
+const TaskCategory = () => {
   const dispatch = useAppDispatch();
   const tasks = useAppSelector(selectTasks);
 
+  const { category } = useParams<{ category: string }>();
+
   useEffect(() => {
-    dispatch(fetchByDashboardTasks('seven'));
-  }, [dispatch]);
+    if (category) {
+      dispatch(fetchByCategoryTasks(category));
+    }
+  }, [dispatch, category]);
 
   return <TaskShow tasks={tasks} />;
 };
 
-export default NextTask;
+export default TaskCategory;

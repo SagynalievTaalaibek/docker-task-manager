@@ -1,11 +1,19 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose, { Document } from 'mongoose';
 import { User } from './user.schema';
-import mongoose from 'mongoose';
+import { Category } from './category.schema';
 
 @Schema({ timestamps: true })
 export class Task {
   @Prop({ required: true })
   title: string;
+
+  @Prop({
+    type: String,
+    enum: ['low', 'medium', 'high'],
+    default: 'medium',
+  })
+  priority: string;
 
   @Prop({
     type: String,
@@ -15,9 +23,12 @@ export class Task {
   status: string;
 
   @Prop()
-  dueDate: Date;
+  dueDate?: Date;
 
-  @Prop({ ref: User.name, required: true })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Category.name }) // Ссылка на категорию
+  categoryId?: mongoose.Schema.Types.ObjectId;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name, required: true }) // ID пользователя
   userId: mongoose.Schema.Types.ObjectId;
 }
 

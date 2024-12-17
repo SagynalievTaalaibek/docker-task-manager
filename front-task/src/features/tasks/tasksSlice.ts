@@ -5,6 +5,8 @@ import {
   createTask,
   deleteTask,
   editTask,
+  fetchByCategoryTasks,
+  fetchByDashboardTasks,
   fetchOneTask,
   fetchSearchTasks,
   fetchTasks,
@@ -63,6 +65,28 @@ export const tasksSlice = createSlice({
       .addCase(fetchSearchTasks.rejected, (state) => {
         state.fetchTasksLoading = false;
       })
+
+      .addCase(fetchByDashboardTasks.pending, (state) => {
+        state.fetchTasksLoading = true;
+      })
+      .addCase(fetchByDashboardTasks.fulfilled, (state, action) => {
+        state.fetchTasksLoading = false;
+        state.tasks = action.payload;
+      })
+      .addCase(fetchByDashboardTasks.rejected, (state) => {
+        state.fetchTasksLoading = false;
+      })
+
+      .addCase(fetchByCategoryTasks.pending, (state) => {
+        state.fetchTasksLoading = true;
+      })
+      .addCase(fetchByCategoryTasks.fulfilled, (state, action) => {
+        state.fetchTasksLoading = false;
+        state.tasks = action.payload;
+      })
+      .addCase(fetchByCategoryTasks.rejected, (state) => {
+        state.fetchTasksLoading = false;
+      })
       // Fetch one task
       .addCase(fetchOneTask.pending, (state) => {
         state.fetchOneTaskLoading = true;
@@ -111,7 +135,7 @@ export const tasksSlice = createSlice({
 export const tasksReducer = tasksSlice.reducer;
 export const { openTask } = tasksSlice.actions;
 
-export const selectIsOpen =  (state: RootState) => state.tasks.isOpen;
+export const selectIsOpen = (state: RootState) => state.tasks.isOpen;
 
 export const selectTasks = (state: RootState) => state.tasks.tasks;
 export const selectOneTask = (state: RootState) => state.tasks.oneTask;

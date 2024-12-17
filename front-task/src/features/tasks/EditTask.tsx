@@ -20,15 +20,20 @@ import {
 } from './tasksSlice';
 import { editTask, fetchOneTask } from './tasksThunks';
 import { TaskMutation } from '../../types';
-import { STATUS } from '../../constants';
+import { PRIORITIES, STATUS } from '../../constants';
+import { selectCategory } from '../category/categorySlice.ts';
+import { fetchCategory } from '../category/categoryThunks.ts';
 
 const formatDate = (date: string): string => date.slice(0, 10);
 
 const EditTask = () => {
+  const categories = useAppSelector(selectCategory);
   const [task, setTask] = useState<TaskMutation>({
     title: '',
     dueDate: '',
     status: '',
+    categoryId: '',
+    priority: '',
   });
 
   const { id } = useParams() as { id: string };
@@ -41,6 +46,7 @@ const EditTask = () => {
   useEffect(() => {
     if (id) {
       dispatch(fetchOneTask(id));
+      dispatch(fetchCategory());
     }
   }, [dispatch, id]);
 
@@ -50,6 +56,8 @@ const EditTask = () => {
         title: oneTask.title,
         dueDate: formatDate(oneTask.dueDate),
         status: oneTask.status,
+        priority: oneTask.priority,
+        categoryId: oneTask.categoryId
       });
     }
   }, [oneTask]);
@@ -120,6 +128,52 @@ const EditTask = () => {
                   </MenuItem>
                   {STATUS.map((item) => (
                     <MenuItem key={item.id} value={item.value}>
+                      {item.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={12}>
+              <FormControl fullWidth>
+                <InputLabel id="priority">Priority</InputLabel>
+                <Select
+                  id="priority"
+                  labelId="priority"
+                  value={task.priority}
+                  name="priority"
+                  label="Priority"
+                  onChange={selectChangeHandler}
+                  variant="outlined"
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {PRIORITIES.map((item) => (
+                    <MenuItem key={item.id} value={item.name}>
+                      {item.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={12}>
+              <FormControl fullWidth>
+                <InputLabel id="category">Category</InputLabel>
+                <Select
+                  id="category"
+                  labelId="category"
+                  value={task.categoryId}
+                  name="categoryId"
+                  label="Category"
+                  onChange={selectChangeHandler}
+                  variant="outlined"
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {categories.map((item) => (
+                    <MenuItem key={item._id} value={item._id}>
                       {item.name}
                     </MenuItem>
                   ))}

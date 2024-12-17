@@ -5,6 +5,7 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 import TodayIcon from '@mui/icons-material/Today';
+
 export const apiURL = 'http://localhost:8000';
 
 export const STATUS = [
@@ -56,7 +57,6 @@ export const mainRoutes = [
   },
 ];
 
-
 export const dashboardSuperAdminRoutes = [
   {
     id: 'page_create_active_333',
@@ -78,5 +78,20 @@ export const dashboardSuperAdminRoutes = [
     tooltip: 'Архив',
     url: 'admin/archive',
     icon: InventoryIcon,
+  },
+];
+
+export const PRIORITIES = [
+  {
+    id: 'priority1',
+    name: 'low',
+  },
+  {
+    id: 'priority2',
+    name: 'medium',
+  },
+  {
+    id: 'priority3',
+    name: 'high',
   },
 ];

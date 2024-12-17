@@ -43,6 +43,8 @@ export interface TaskMutation {
   title: string;
   status: string;
   dueDate: string;
+  categoryId: string,
+  priority: string;
 }
 
 export interface TaskGet {
@@ -50,6 +52,19 @@ export interface TaskGet {
   title: string;
   status: string;
   dueDate: string;
+  categoryId: string,
+  priority: string;
+}
+
+export interface CategoryMutation {
+  name: string;
+  description: string;
+}
+
+export interface CategoryGet {
+  _id: string;
+  name: string;
+  description: string;
 }
 
 

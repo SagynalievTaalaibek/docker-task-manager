@@ -12,10 +12,16 @@ export class CreateTaskDto {
   title: string;
 
   @IsOptional()
-  @IsEnum(['pending', 'in_progress', 'completed'], {
-    message: 'Status must be either "pending", "in_progress", or "completed"',
-  })
-  status?: string;
+  @IsEnum(['pending', 'in_progress', 'completed'])
+  status: string;
+
+  @IsOptional()
+  @IsEnum(['low', 'medium', 'high'])
+  priority: string;
+
+  @IsOptional()
+  @IsString()
+  categoryId?: string;
 
   @IsOptional()
   @IsDate()

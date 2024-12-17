@@ -13,6 +13,7 @@ import {
 import storage from 'redux-persist/lib/storage';
 import { userReducer } from '../features/users/userSlice';
 import { tasksReducer } from '../features/tasks/tasksSlice.ts';
+import { categoryReducer } from '../features/category/categorySlice.ts';
 
 const usersPersistConfig = {
   key: 'cocktail:users',
@@ -23,6 +24,7 @@ const usersPersistConfig = {
 const rootReducer = combineReducers({
   users: persistReducer(usersPersistConfig, userReducer),
   tasks: tasksReducer,
+  category:categoryReducer
 });
 
 export const store = configureStore({

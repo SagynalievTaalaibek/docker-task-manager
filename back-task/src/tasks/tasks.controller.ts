@@ -7,7 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req, Query,
+  Req,
+  Query,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -21,14 +22,41 @@ export class TasksController {
 
   @UseGuards(TokenAuthGuard)
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto, @Req() request: AuthenticatedRequest) {
+  create(
+    @Body() createTaskDto: CreateTaskDto,
+    @Req() request: AuthenticatedRequest,
+  ) {
+    if (!createTaskDto.status) createTaskDto.status = 'pending';
+    if (!createTaskDto.priority) createTaskDto.priority = 'medium';
+
+    if (!createTaskDto.categoryId) createTaskDto.categoryId = null;
+
     return this.tasksService.create(createTaskDto, request.user._id);
   }
 
   @UseGuards(TokenAuthGuard)
   @Get()
-  findAll(@Req() request: AuthenticatedRequest, @Query() query: {taskSearch: boolean, search: string}) {
-    return this.tasksService.findAll(request.user._id, query.taskSearch, query.search);
+  findAll(
+    @Req() request: AuthenticatedRequest,
+    @Query()
+    query: {
+      taskSearch: boolean;
+      search: string;
+      dashboard: boolean;
+      dashboardSearch: string;
+      category: boolean;
+      categorySearch: string;
+    },
+  ) {
+    return this.tasksService.findAll(
+      request.user._id,
+      query.taskSearch,
+      query.search,
+      query.dashboard,
+      query.dashboardSearch,
+      query.category,
+      query.categorySearch,
+    );
   }
 
   @UseGuards(TokenAuthGuard)
