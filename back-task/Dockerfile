@@ -1,21 +1,20 @@
-# Установим Node.js как базовый образ
-FROM node:21
+# Используем Node.js как базовый образ
+FROM node:18
 
-# Устанавливаем рабочую директорию
+# Рабочая директория внутри контейнера
 WORKDIR /app
 
-# Копируем package.json и устанавливаем зависимости
-COPY package*.json ./
+# Копируем package.json и package-lock.json в контейнер
+COPY ./package*.json ./
+
+# Устанавливаем зависимости
 RUN npm install
 
-# Устанавливаем nodemon для разработки
-RUN npm install -g nodemon
-
-# Копируем оставшиеся файлы
+# Копируем весь проект в рабочую директорию
 COPY . .
 
-# Экспонируем порт
-EXPOSE 8000
+# Открываем порт для приложения
+EXPOSE 3000
 
-# Используем nodemon для разработки
-CMD ["npx", "nodemon", "src/main.ts"]
+# Команда для запуска приложения
+CMD ["npm", "run", "start"]
