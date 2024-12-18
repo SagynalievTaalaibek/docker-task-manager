@@ -15,7 +15,7 @@ RUN npm run build
 # Шаг 2: Используем Nginx для раздачи
 FROM nginx:alpine
 
-# Копируем собранные файлы в директорию Nginx
+# Копируем собранные файлы в директорию Nginx /usr/share/nginx/html
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Открываем порт 80
