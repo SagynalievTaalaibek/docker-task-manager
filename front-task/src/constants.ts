@@ -6,7 +6,7 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 import TodayIcon from '@mui/icons-material/Today';
 
-export const apiURL = 'http://localhost:8000';
+export const API_URL = import.meta.env.VITE_API_URL ;
 
 export const STATUS = [
   {
