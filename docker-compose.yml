@@ -21,7 +21,6 @@ services:
       - "8000:8000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=mongodb://localhost:27017/task
     networks:
       - app-network
 

@@ -1,23 +1,22 @@
-# Используем Node.js как базовый образ
-FROM node:18
 
-# Рабочая директория внутри контейнера
+# Установим Node.js как базовый образ
+FROM node:21
+
+# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Копируем package.json и package-lock.json в контейнер
+# Копируем package.json и устанавливаем зависимости
 COPY package*.json ./
-
-# Устанавливаем зависимости
 RUN npm install
 
-# Копируем весь проект в рабочую директорию
+# Устанавливаем nodemon для разработки
+RUN npm install -g nodemon
+
+# Копируем оставшиеся файлы
 COPY . .
 
-# Компиляция TypeScript (NestJS)
-RUN npm run build
+# Экспонируем порт
+EXPOSE 8000
 
-# Открываем порт для приложения
-EXPOSE 3000
-
-# Команда для запуска собранного приложения
-CMD ["node", "dist/main"]
+# Используем nodemon для разработки
+CMD ["npx", "nodemon", "src/main.ts"]
