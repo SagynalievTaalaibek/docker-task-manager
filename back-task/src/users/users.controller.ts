@@ -8,6 +8,21 @@ import { AuthGuard } from '@nestjs/passport';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Post('send-otp')
+  async sendOtp(@Body('email') email: string) {
+    return this.usersService.sendOtp(email);
+  }
+
+  @Post('compare-otp')
+  async compareOtp(@Body() body: { email: string; otp: string }) {
+    return this.usersService.compareOtp(body.email, body.otp);
+  }
+
+  @Post('change-password')
+  async changePassword(@Body() body: { email: string; password: string }) {
+    return this.usersService.changePassword(body.email, body.password);
+  }
+
   @Post()
   register(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);

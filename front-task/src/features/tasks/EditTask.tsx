@@ -14,11 +14,12 @@ import {
   TextField,
 } from '@mui/material';
 import {
+  selectDeleteTaskLoading,
   selectEditTaskLoading,
   selectFetchOneTaskLoading,
   selectOneTask,
 } from './tasksSlice';
-import { editTask, fetchOneTask } from './tasksThunks';
+import { deleteTask, editTask, fetchOneTask, fetchTasks } from './tasksThunks';
 import { TaskMutation } from '../../types';
 import { PRIORITIES, STATUS } from '../../constants';
 import { selectCategory } from '../category/categorySlice.ts';
@@ -42,6 +43,7 @@ const EditTask = () => {
   const oneTask = useAppSelector(selectOneTask);
   const editLoading = useAppSelector(selectEditTaskLoading);
   const fetchOneLoading = useAppSelector(selectFetchOneTaskLoading);
+  const deleteLoading = useAppSelector(selectDeleteTaskLoading);
 
   useEffect(() => {
     if (id) {
@@ -57,15 +59,23 @@ const EditTask = () => {
         dueDate: formatDate(oneTask.dueDate),
         status: oneTask.status,
         priority: oneTask.priority,
-        categoryId: oneTask.categoryId
+        categoryId: oneTask.categoryId,
       });
     }
   }, [oneTask]);
+
+  const onDelete = async () => {
+    if (id) {
+      await dispatch(deleteTask(id));
+      navigate('/');
+    }
+  };
 
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await dispatch(editTask({ id, data: task }));
+    await dispatch(fetchTasks());
     navigate('/');
   };
 
@@ -189,6 +199,15 @@ const EditTask = () => {
             disabled={editLoading}
           >
             {editLoading ? <CircularProgress size={24} /> : 'Save Changes'}
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ marginTop: '20px', marginLeft: '20px', backgroundColor: 'red' }}
+            disabled={deleteLoading}
+            onClick={onDelete}
+          >
+            {editLoading ? <CircularProgress size={24} /> : 'Delete'}
           </Button>
         </form>
       )}

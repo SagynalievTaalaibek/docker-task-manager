@@ -13,6 +13,7 @@ import InboxTask from './features/tasks/InboxTask.tsx';
 import NextTask from './features/tasks/NextTask.tsx';
 import Completed from './features/tasks/Completed.tsx';
 import TaskCategory from './features/tasks/TaskCategory.tsx';
+import SendEmail from './features/users/SendEmail.tsx';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -82,6 +83,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/change-password" element={<SendEmail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       )}

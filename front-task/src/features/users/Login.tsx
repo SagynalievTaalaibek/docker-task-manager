@@ -92,10 +92,15 @@ const Login = () => {
           >
             Sign In
           </Button>
-          <Grid2 container justifyContent="flex-end">
+          <Grid2 container justifyContent="flex-start" spacing={2}>
             <Grid2>
               <Link component={RouterLink} to="/register" variant="body2">
                 Or sing up
+              </Link>
+            </Grid2>
+            <Grid2>
+              <Link component={RouterLink} to="/change-password" variant="body2" sx={{ color: '#0866FF' }}>
+                Forget your password?
               </Link>
             </Grid2>
           </Grid2>

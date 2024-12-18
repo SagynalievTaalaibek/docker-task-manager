@@ -22,6 +22,9 @@ export class User {
 
   @Prop({ required: true })
   token: string;
+
+  @Prop()
+  otp: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
