@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectRegisterError, selectRegisterLoading } from './userSlice';
 import { registerUser } from './userThunks';
 import {
+  Alert,
   Avatar,
   Box,
   Button,
@@ -27,14 +28,6 @@ const Register = () => {
     password: '',
     username: '',
   });
-
-  const getFieldError = (fieldName: string) => {
-    try {
-      return error?.errors[fieldName].message;
-    } catch {
-      return undefined;
-    }
-  };
 
   const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -64,6 +57,7 @@ const Register = () => {
           alignItems: 'center',
         }}
       >
+        {error && <Alert severity="error">{error.message}</Alert>}
         <Avatar sx={{ m: 1, backgroundColor: 'secondary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
@@ -79,8 +73,6 @@ const Register = () => {
                 value={state.email}
                 onChange={inputChangeHandler}
                 autoComplete="new-email"
-                error={Boolean(getFieldError('email'))}
-                helperText={getFieldError('email')}
               />
             </Grid2>
             <Grid2 size={12}>
@@ -91,8 +83,6 @@ const Register = () => {
                 value={state.password}
                 autoComplete="new-password"
                 onChange={inputChangeHandler}
-                error={Boolean(getFieldError('password'))}
-                helperText={getFieldError('password')}
               />
             </Grid2>
             <Grid2 size={12}>
@@ -102,8 +92,6 @@ const Register = () => {
                 value={state.username}
                 onChange={inputChangeHandler}
                 autoComplete="new-username"
-                error={Boolean(getFieldError('username'))}
-                helperText={getFieldError('username')}
               />
             </Grid2>
           </Grid2>

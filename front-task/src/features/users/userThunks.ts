@@ -7,7 +7,8 @@ import {
   GlobalError,
   LoginMutation,
   RegisterMutation,
-  RegisterResponse, SendOtpPayload,
+  RegisterResponse,
+  SendOtpPayload,
   ValidationError,
 } from '../../types';
 
@@ -57,28 +58,33 @@ export const logout = createAsyncThunk<void, undefined>(
   },
 );
 
-
 /// Change Password
-export const sendEmail = createAsyncThunk<string, string, { rejectValue: GlobalError }>(
-  'changePassword/sendEmail',
-  async (email) => {
-    const response = await axiosApi.post('/users/send-otp', { email });
-    return response.data;
-  },
-);
+export const sendEmail = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: GlobalError }
+>('changePassword/sendEmail', async (email) => {
+  const response = await axiosApi.post('/users/send-otp', { email });
+  return response.data;
+});
 
-export const sendOtp = createAsyncThunk<string, SendOtpPayload, { rejectValue: GlobalError }>(
-  'changePassword/sendOtp',
-  async ({ email, otp }) => {
-    const response = await axiosApi.post('/users/compare-otp', { email, otp });
-    return response.data;
-  },
-);
+export const sendOtp = createAsyncThunk<
+  string,
+  SendOtpPayload,
+  { rejectValue: GlobalError }
+>('changePassword/sendOtp', async ({ email, otp }) => {
+  const response = await axiosApi.post('/users/compare-otp', { email, otp });
+  return response.data;
+});
 
-export const changePassword = createAsyncThunk<string, ChangePasswordData, { rejectValue: GlobalError }>(
-  'changePassword/changePassword',
-  async ({ email, password }) => {
-    const response = await axiosApi.post('/users/change-password', { email, password });
-    return response.data;
-  },
-);
+export const changePassword = createAsyncThunk<
+  string,
+  ChangePasswordData,
+  { rejectValue: GlobalError }
+>('changePassword/changePassword', async ({ email, password }) => {
+  const response = await axiosApi.post('/users/change-password', {
+    email,
+    password,
+  });
+  return response.data;
+});
