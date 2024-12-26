@@ -15,7 +15,13 @@ export class TasksService {
     private categoryModel: Model<Category>,
   ) {}
 
-  async create(createTaskDto: CreateTaskDto, userId: string): Promise<Task> {
+  async create(createTaskDto: CreateTaskDto, userId: string): Promise<Task | {message: string}> {
+    const taskTitle = createTaskDto.title;
+    const existingTask = await this.taskModel.findOne({ title: taskTitle, userId }).exec();
+
+    if (existingTask) {
+      return { message: `Task with title ${taskTitle} already exists.` };
+    }
     const task = new this.taskModel({ ...createTaskDto, userId });
     return task.save();
   }

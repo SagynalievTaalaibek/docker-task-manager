@@ -12,17 +12,21 @@ export const fetchTasks = createAsyncThunk<TaskGet[]>(
 );
 
 export const fetchSearchTasks = createAsyncThunk<TaskGet[], string>(
-    'tasks/fetchSearchTasks',
-    async (search) => {
-        const response = await axiosApi.get<TaskGet[]>(`/tasks?taskSearch=true&search=${search}`);
-        return response.data;
-    },
+  'tasks/fetchSearchTasks',
+  async (search) => {
+    const response = await axiosApi.get<TaskGet[]>(
+      `/tasks?taskSearch=true&search=${search}`,
+    );
+    return response.data;
+  },
 );
 
 export const fetchByDashboardTasks = createAsyncThunk<TaskGet[], string>(
   'tasks/fetchByDashboardTasks',
   async (search) => {
-    const response = await axiosApi.get<TaskGet[]>(`/tasks?dashboard=true&dashboardSearch=${search}`);
+    const response = await axiosApi.get<TaskGet[]>(
+      `/tasks?dashboard=true&dashboardSearch=${search}`,
+    );
     return response.data;
   },
 );
@@ -30,7 +34,9 @@ export const fetchByDashboardTasks = createAsyncThunk<TaskGet[], string>(
 export const fetchByCategoryTasks = createAsyncThunk<TaskGet[], string>(
   'tasks/fetchByCategoryTasks',
   async (search) => {
-    const response = await axiosApi.get<TaskGet[]>(`/tasks?category=true&categorySearch=${search}`);
+    const response = await axiosApi.get<TaskGet[]>(
+      `/tasks?category=true&categorySearch=${search}`,
+    );
     return response.data;
   },
 );
@@ -44,18 +50,11 @@ export const fetchOneTask = createAsyncThunk<TaskGet, string>(
 );
 
 // Создание новой задачи
-export const createTask = createAsyncThunk<void, TaskMutation>(
+export const createTask = createAsyncThunk<{ message: string }, TaskMutation>(
   'tasks/createTask',
   async (taskData) => {
-    try {
-      await axiosApi.post('/tasks', taskData);
-    } catch (error: any) {
-      if (error.response.status === 500) {
-        console.error('Internal Server Error:', error.message);
-      } else if (error.response.status === 422) {
-        alert('This email is already registered!');
-      }
-    }
+    const response = await axiosApi.post('/tasks', taskData);
+    return response.data;
   },
 );
 
@@ -70,14 +69,6 @@ export const editTask = createAsyncThunk<
 export const deleteTask = createAsyncThunk<void, string>(
   'tasks/deleteTask',
   async (taskId) => {
-    try {
-      await axiosApi.delete(`/tasks/${taskId}`);
-    } catch (error: any) {
-      if (error.response.status === 500) {
-        console.error('Internal Server Error:', error.message);
-      } else if (error.response.status === 400) {
-        alert('This employee is using in another table!');
-      }
-    }
+    await axiosApi.delete(`/tasks/${taskId}`);
   },
 );

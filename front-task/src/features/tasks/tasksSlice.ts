@@ -21,6 +21,7 @@ interface TasksState {
   fetchTasksLoading: boolean;
   fetchOneTaskLoading: boolean;
   isOpen: boolean;
+  error: string;
 }
 
 const initialState: TasksState = {
@@ -32,6 +33,7 @@ const initialState: TasksState = {
   fetchTasksLoading: false,
   fetchOneTaskLoading: false,
   isOpen: false,
+  error: '',
 };
 
 export const tasksSlice = createSlice({
@@ -102,8 +104,9 @@ export const tasksSlice = createSlice({
       .addCase(createTask.pending, (state) => {
         state.createTaskLoading = true;
       })
-      .addCase(createTask.fulfilled, (state) => {
+      .addCase(createTask.fulfilled, (state, action) => {
         state.createTaskLoading = false;
+        state.error = action.payload.message || '';
       })
       .addCase(createTask.rejected, (state) => {
         state.createTaskLoading = false;
@@ -149,3 +152,4 @@ export const selectEditTaskLoading = (state: RootState) =>
   state.tasks.editTaskLoading;
 export const selectDeleteTaskLoading = (state: RootState) =>
   state.tasks.deleteTaskLoading;
+export const selectTaskError = (state: RootState)  => state.tasks.error;

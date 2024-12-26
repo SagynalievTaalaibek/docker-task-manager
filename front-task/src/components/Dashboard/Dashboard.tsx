@@ -17,13 +17,13 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { Button, Container, Grid2, Tooltip } from '@mui/material';
+import {Alert, Button, Container, Grid2, Tooltip} from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../app/hooks.ts';
 import { logout } from '../../features/users/userThunks.ts';
 import { selectUser } from '../../features/users/userSlice.ts';
 import { mainRoutes } from '../../constants.ts';
 import AdjustIcon from '@mui/icons-material/Adjust';
-import { openTask } from '../../features/tasks/tasksSlice.ts';
+import {openTask, selectTaskError} from '../../features/tasks/tasksSlice.ts';
 import NewTaskDialog from '../../features/tasks/components/NewTaskDialog.tsx';
 import { CategoryMutation, TaskMutation } from '../../types';
 import { createTask, fetchTasks } from '../../features/tasks/tasksThunks.ts';
@@ -113,6 +113,7 @@ const Dashboard: React.FC<React.PropsWithChildren> = ({ children }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+  const errorMessage = useAppSelector(selectTaskError);
 
   const categories = useAppSelector(selectCategory);
 
@@ -180,13 +181,17 @@ const Dashboard: React.FC<React.PropsWithChildren> = ({ children }) => {
               >
                 Добро пожаловать! {user?.username}
               </Typography>
+
               <Button
-                sx={{ marginLeft: 4, fontSize: '20px' }}
+                sx={{ marginLeft: 4, marginRight: 4, fontSize: '20px' }}
                 variant={'contained'}
                 onClick={() => dispatch(openTask(true))}
               >
                 New Task
               </Button>
+              {errorMessage.length > 0 && (
+                  <Alert severity="error">{errorMessage}</Alert>
+              )}
             </Toolbar>
           </AppBar>
           <Drawer variant="permanent" open={open}>
