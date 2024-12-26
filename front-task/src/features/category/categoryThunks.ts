@@ -18,10 +18,11 @@ export const fetchOneCategory = createAsyncThunk<CategoryGet, string>(
   },
 );
 
-export const createCategory = createAsyncThunk<void, CategoryMutation>(
+export const createCategory = createAsyncThunk<{ message: string }, CategoryMutation>(
   'category/createCategory',
   async (data) => {
-    await axiosApi.post('/category', data);
+    const response = await axiosApi.post('/category', data);
+    return response.data;
   },
 );
 

@@ -30,7 +30,7 @@ import { createTask, fetchTasks } from '../../features/tasks/tasksThunks.ts';
 import DateCalendarValue from '../DateCalendarValue.tsx';
 import {
   openCategory,
-  selectCategory,
+  selectCategory, selectError,
 } from '../../features/category/categorySlice.ts';
 import CategoryDialog from '../../features/category/CategoryDialog.tsx';
 import {
@@ -114,6 +114,7 @@ const Dashboard: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const errorMessage = useAppSelector(selectTaskError);
+  const errorCategoryMessage = useAppSelector(selectError);
 
   const categories = useAppSelector(selectCategory);
 
@@ -191,6 +192,9 @@ const Dashboard: React.FC<React.PropsWithChildren> = ({ children }) => {
               </Button>
               {errorMessage.length > 0 && (
                   <Alert severity="error">{errorMessage}</Alert>
+              )}
+              {errorCategoryMessage.length > 0 && (
+                  <Alert severity="error">{errorCategoryMessage}</Alert>
               )}
             </Toolbar>
           </AppBar>
