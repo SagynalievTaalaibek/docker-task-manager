@@ -1,11 +1,14 @@
-import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import mongoose, { Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Request } from 'express';
 import { User, UserDocument } from '../schemas/user.schema';
 import * as nodemailer from 'nodemailer';
-
 
 @Injectable()
 export class UsersService {
@@ -27,7 +30,6 @@ export class UsersService {
 
     console.log('USER_MAILER:', process.env.USER_MAILER);
     console.log('USER_MAILER_PASSWORD:', process.env.USER_MAILER_PASSWORD);
-
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -73,27 +75,28 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    try {
-      const user = new this.userModel({
-        email: createUserDto.email,
-        password: createUserDto.password,
-        username: createUserDto.username,
-      });
-
-      user.generateToken();
-
-      await user.save();
-      return {
-        message: 'Ok',
-        user,
-      };
-    } catch (e) {
-      if (e instanceof mongoose.Error.ValidationError) {
-        throw new UnprocessableEntityException(e);
-      }
-
-      throw e;
+    const existingUser = await this.userModel.findOne({
+      email: createUserDto.email,
+    });
+    if (existingUser) {
+      throw new UnprocessableEntityException(
+        'This user is already registered!',
+      );
     }
+
+    const user = new this.userModel({
+      email: createUserDto.email,
+      password: createUserDto.password,
+      username: createUserDto.username,
+    });
+
+    user.generateToken();
+
+    await user.save();
+    return {
+      message: 'Ok',
+      user,
+    };
   }
 
   async logout(req: Request) {

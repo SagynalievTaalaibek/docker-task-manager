@@ -12,15 +12,9 @@ export interface RegisterMutation {
 }
 
 export interface ValidationError {
-  errors: {
-    [key: string]: {
-      name: string;
-      message: string;
-    };
-  };
+  error: string;
   message: string;
-  name: string;
-  _message: string;
+  statusCode: number;
 }
 
 export interface RegisterResponse {
